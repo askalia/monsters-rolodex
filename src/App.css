@@ -14,7 +14,6 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,6 +25,7 @@
 .App-header h1 {
   font-family: "Bigelow Rules", cursive;
   font-size: 2em;
+  color: #0ccac4;
 }
 
 .App-link {
