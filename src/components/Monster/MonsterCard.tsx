@@ -5,10 +5,14 @@ const PICTURE_SOURCE = "https://robohash.org/";
 
 export type MonsterProps = {
   monster: Monster;
+  removeMonster: (monster: Monster) => void;
 };
 
-export const MonsterCard: FC<MonsterProps> = ({ monster }): ReactElement => (
-  <div className="monster-card">
+export const MonsterCard: FC<MonsterProps> = ({
+  monster,
+  removeMonster,
+}): ReactElement => (
+  <div className="monster-card" onClick={(e) => removeMonster(monster)}>
     <img
       src={`${PICTURE_SOURCE}/${monster.id}?set=set2&size=200x200`}
       alt={monster.name}

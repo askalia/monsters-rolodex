@@ -1,24 +1,36 @@
-import { ChangeEvent, FC, ReactElement, useState } from "react";
-
-export type SearchBoxProps = {
-  onSearch: (searchString: string) => void;
+import { ChangeEvent, FC, ReactElement } from "react";
+import { Monster } from "../Monster/monster.model";
+import "./search-box.styles.css";
+export type SearchBoxProps<T = any> = {
+  items: T[];
+  placeholder: string;
+  searchOnKey: keyof Monster;
+  onResults: (foundMonsters: Monster[]) => void;
 };
 
-export const SearchBox: FC<SearchBoxProps> = ({ onSearch }): ReactElement => {
-  const [searchString, updateSearchString] = useState("");
-
-  const updateSearch = (searchTyped: string) => {
-    updateSearchString(searchTyped);
-    onSearch(searchString);
+export const SearchBox: FC<SearchBoxProps> = ({
+  items,
+  searchOnKey,
+  placeholder,
+  onResults,
+}): ReactElement => {
+  const searchMonsters = (searchQuery: string) => {
+    const foundItems = items.filter((item) =>
+      String((item as any)[searchOnKey])
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+    onResults(foundItems);
   };
 
   return (
     <div>
       <input
+        className="search-box"
         type="search"
-        placeholder="search monster by name"
+        placeholder={placeholder || ""}
         onChange={(e: ChangeEvent) =>
-          updateSearch((e.target as HTMLInputElement).value)
+          searchMonsters((e.target as HTMLInputElement).value)
         }
       />
     </div>

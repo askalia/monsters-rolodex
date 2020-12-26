@@ -3,6 +3,7 @@ import { Monster } from "../Monster/monster.model";
 import { toMonster } from "../Monster/monster.helper";
 import { SearchBox } from "../SearchBox/SearchBox";
 import { ItemsGallery } from "../ItemsGallery/ItemsGallery";
+import "./monsters-rolodex.styles.css";
 
 type MonstersRolodexProps = {
   monstersDatasourceUrl?: string;
@@ -23,7 +24,6 @@ export class MonstersRolodex extends Component<
       monsters: [],
       foundMonsters: [],
     };
-    this.onSearch = this.onSearch.bind(this);
   }
 
   public static defaultProps = {
@@ -63,27 +63,39 @@ export class MonstersRolodex extends Component<
     return this.state.foundMonsters;
   }
 
-  onSearch(searchString: string) {
-    if (!searchString.length) {
-      return this.setState({
-        foundMonsters: this._monsters,
-      });
-    }
-    const foundMonsters = this._monsters.filter((monster) =>
-      monster.name.toLowerCase().includes(searchString.toLowerCase())
-    );
+  removeMonster = (monsterToRemove: Monster) => {
     this.setState({
-      foundMonsters,
+      foundMonsters: [...this.state.foundMonsters].filter(
+        (monster) => monster.id !== monsterToRemove.id
+      ),
     });
-  }
+  };
+
+  updateListMonsters = (
+    foundMonsters: { id: number; name: string; email: string }[]
+  ) => {
+    this.setState({
+      foundMonsters: foundMonsters.map(toMonster),
+    });
+  };
 
   render() {
     return (
       <>
-        <div>
-          <SearchBox onSearch={this.onSearch} />
+        <div className="searchbox-container">
+          <SearchBox
+            items={this._monsters}
+            placeholder={"search monster by name"}
+            onResults={this.updateListMonsters}
+            searchOnKey={"name"}
+          />
         </div>
-        <ItemsGallery {...{ items: this._foundMonsters }} />
+        <ItemsGallery
+          {...{
+            items: this._foundMonsters,
+            removeMonster: this.removeMonster,
+          }}
+        />
       </>
     );
   }

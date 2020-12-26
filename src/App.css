@@ -23,6 +23,10 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.App-header h1 {
+  font-family: "Bigelow Rules", cursive;
+  font-size: 2em;
+}
 
 .App-link {
   color: #61dafb;
