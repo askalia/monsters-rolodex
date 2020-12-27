@@ -12,6 +12,7 @@ type MonstersRolodexProps = {
 type MonstersRolodexState = {
   monsters: Monster[];
   foundMonsters: Monster[];
+  title: string;
 };
 
 export class MonstersRolodex extends Component<
@@ -23,6 +24,7 @@ export class MonstersRolodex extends Component<
     this.state = {
       monsters: [],
       foundMonsters: [],
+      title: "",
     };
   }
 
@@ -64,24 +66,41 @@ export class MonstersRolodex extends Component<
   }
 
   removeMonster = (monsterToRemove: Monster) => {
-    this.setState({
-      foundMonsters: [...this.state.foundMonsters].filter(
-        (monster) => monster.id !== monsterToRemove.id
-      ),
-    });
+    this.setState(
+      (currentState) => ({
+        foundMonsters: [...currentState.foundMonsters].filter(
+          (monster) => monster.id !== monsterToRemove.id
+        ),
+      }),
+      () => {
+        const isEmptyListMonsters = this.state.foundMonsters.length === 0;
+        isEmptyListMonsters === true && this.restockMonsters();
+      }
+    );
+  };
+
+  restockMonsters = () => {
+    setTimeout(() => {
+      this.setState((currentState) => ({
+        foundMonsters: currentState.monsters,
+      }));
+    }, 1000);
   };
 
   updateListMonsters = (
-    foundMonsters: { id: number; name: string; email: string }[]
+    foundMonsters: { id: number; name: string; email: string }[],
+    searchString: string
   ) => {
     this.setState({
       foundMonsters: foundMonsters.map(toMonster),
+      title: searchString,
     });
   };
 
   render() {
     return (
       <>
+        <div>{this.state.title || "My monsters"}</div>
         <div className="searchbox-container">
           <SearchBox
             items={this._monsters}

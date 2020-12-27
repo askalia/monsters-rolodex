@@ -5,7 +5,7 @@ export type SearchBoxProps<T = any> = {
   items: T[];
   placeholder: string;
   searchOnKey: keyof Monster;
-  onResults: (foundMonsters: Monster[]) => void;
+  onResults: (foundMonsters: Monster[], searchString: string) => void;
 };
 
 export const SearchBox: FC<SearchBoxProps> = ({
@@ -20,7 +20,7 @@ export const SearchBox: FC<SearchBoxProps> = ({
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
     );
-    onResults(foundItems);
+    onResults(foundItems, searchQuery);
   };
 
   return (
